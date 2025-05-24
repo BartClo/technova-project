@@ -12,7 +12,7 @@ interface Task {
   selector: 'app-tasks',
   imports: [CommonModule, FormsModule],
   templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.scss']
+  //styleUrls: ['./tasks.component.scss']
 })
 export class TasksComponent {
   newTask = '';
