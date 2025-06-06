@@ -115,5 +115,25 @@ export class TasksComponent {
 
     return `${daysLeft} días, ${hoursLeft} horas, ${minutesLeft} minutos`;
   }
-  
+
+  filterStatus: string = 'todas';
+  filterPriority: string = 'todas';
+  showForm: boolean = false;
+
+  setFilterStatus(status: string) {
+    this.filterStatus = status;
+  }
+
+  setFilterPriority(priority: string) {
+    this.filterPriority = priority;
+  }
+
+  filteredTasks() {
+    return this.tasks.filter(task => {
+      const statusOk = this.filterStatus === 'todas' || task.status === this.filterStatus;
+      const priorityOk = this.filterPriority === 'todas' || task.priority === this.filterPriority;
+      return statusOk && priorityOk;
+    });
+  }
+
 }
