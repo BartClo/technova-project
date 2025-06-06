@@ -10,5 +10,11 @@
 </div>
 
 <a routerLink="/tasks" class="btn-main volver-btn">← Volver a Tareas</a>
+
+<div class="percent-report">
+  <p><strong>Completadas:</strong> {{ completedPercentage }}%</p>
+  <p><strong>Pendientes:</strong> {{ pendingPercentage }}%</p>
+  <button (click)="exportChart()">Exportar informe como imagen</button>
+</div>
 </main> </div>
 

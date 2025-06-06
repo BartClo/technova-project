@@ -46,6 +46,18 @@ export class DashboardComponent {
     return this.tasks.filter(t => t.completed).length;
   }
 
+  get totalTasks() {
+    return this.tasks.length;
+  }
+
+  get completedPercentage() {
+    return this.totalTasks === 0 ? 0 : Math.round((this.completedTasksCount / this.totalTasks) * 100);
+  }
+
+  get pendingPercentage() {
+    return this.totalTasks === 0 ? 0 : Math.round((this.pendingTasksCount / this.totalTasks) * 100);
+  }
+
   public barChartData: ChartData<'bar'> = {
     labels: ['Pendientes', 'Completadas'],
     datasets: [
@@ -67,5 +79,15 @@ export class DashboardComponent {
       this.pendingTasksCount,
       this.completedTasksCount,
     ];
+  }
+
+  exportChart() {
+    const canvas = document.querySelector('canvas') as HTMLCanvasElement;
+    if (canvas) {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = 'informe-tareas.png';
+      link.click();
+    }
   }
 }
