@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 type TaskStatus = 'pendiente' | 'en progreso' | 'completada';
 type TaskPriority = 'baja' | 'media' | 'alta';
@@ -31,6 +32,8 @@ function parseDateFromInput(dateString: string): Date {
 export class TasksComponent {
   tasks: Task[] = [];
   editingIndex: number | null = null;
+
+  constructor(private router: Router) {}
 
   // Form fields
   formTitle = '';
@@ -134,6 +137,9 @@ export class TasksComponent {
       const priorityOk = this.filterPriority === 'todas' || task.priority === this.filterPriority;
       return statusOk && priorityOk;
     });
+  }
+    goToDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 
 }
