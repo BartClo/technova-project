@@ -1,36 +1,72 @@
-<h2>Mis Tareas</h2>
-<form (ngSubmit)="saveTask()" #taskForm="ngForm">
-  <input [(ngModel)]="formTitle" name="title" placeholder="Título" required />
-  <input [(ngModel)]="formDescription" name="description" placeholder="Descripción" required />
-  <select [(ngModel)]="formStatus" name="status" required>
-    <option value="pendiente">Pendiente</option>
-    <option value="en progreso">En progreso</option>
-    <option value="completada">Completada</option>
-  </select>
-  <select [(ngModel)]="formPriority" name="priority" required>
-    <option value="baja">Baja</option>
-    <option value="media">Media</option>
-    <option value="alta">Alta</option>
-  </select>
-  <label>Fecha de creación:</label>
-  <input [(ngModel)]="formCreatedAt" name="createdAt" type="date" required />
-  <label>Fecha de vencimiento:</label>
-  <input [(ngModel)]="formDueDate" name="dueDate" type="date" required />
-  <button type="submit">{{ editingIndex === null ? 'Agregar' : 'Actualizar' }}</button>
-  <button type="button" (click)="resetForm()" *ngIf="editingIndex !== null">Cancelar</button>
-</form>
+<div class="tasks-wrapper">
+  <main class="tasks-main">
+    <div class="tasks-header">
+      <h2>Mis tareas</h2>
+      <button class="btn-main" (click)="showForm = !showForm">
+        {{ showForm ? 'Cerrar' : 'Nueva tarea' }}
+      </button>
+    </div>
 
-<ul>
-  <li *ngFor="let task of tasks; let i = index">
-    <strong>{{ task.title }}</strong> - {{ task.description }}<br>
-    Estado: {{ task.status }} | Prioridad: {{ task.priority }}<br>
-    Creada: {{ task.createdAt | date:'shortDate' }}<br>
-    Vence: {{ task.dueDate | date:'shortDate' }}<br>
-    Tiempo restante: {{ getTimeLeft(task.dueDate) }}<br>
-    <button (click)="toggleStatus(i)">
-      {{ task.status === 'completada' ? 'Marcar como pendiente' : 'Marcar como completada' }}
-    </button>
-    <button (click)="editTask(i)">Editar</button>
-    <button (click)="removeTask(i)">Eliminar</button>
-  </li>
-</ul>
+    <!-- Filtros funcionales -->
+    <div class="tasks-filters">
+      <div>
+        <span>Estado:</span>
+        <button [class.active]="filterStatus==='todas'" (click)="setFilterStatus('todas')">Todas</button>
+        <button [class.active]="filterStatus==='pendiente'" (click)="setFilterStatus('pendiente')">Pendientes</button>
+        <button [class.active]="filterStatus==='completada'" (click)="setFilterStatus('completada')">Completadas</button>
+      </div>
+      <div>
+        <span>Prioridad:</span>
+        <button [class.active]="filterPriority==='todas'" (click)="setFilterPriority('todas')">Todas</button>
+        <button [class.active]="filterPriority==='alta'" (click)="setFilterPriority('alta')">Alta</button>
+        <button [class.active]="filterPriority==='media'" (click)="setFilterPriority('media')">Media</button>
+        <button [class.active]="filterPriority==='baja'" (click)="setFilterPriority('baja')">Baja</button>
+      </div>
+    </div>
+
+    <!-- Formulario de tarea -->
+    <form *ngIf="showForm" (ngSubmit)="saveTask()" class="task-form">
+      <input [(ngModel)]="formTitle" name="title" placeholder="Título" required />
+      <input [(ngModel)]="formDescription" name="description" placeholder="Descripción" required />
+      <select [(ngModel)]="formStatus" name="status" required>
+        <option value="pendiente">Pendiente</option>
+        <option value="completada">Completada</option>
+      </select>
+      <select [(ngModel)]="formPriority" name="priority" required>
+        <option value="alta">Alta</option>
+        <option value="media">Media</option>
+        <option value="baja">Baja</option>
+      </select>
+      <input [(ngModel)]="formCreatedAt" name="createdAt" type="date" required />
+      <input [(ngModel)]="formDueDate" name="dueDate" type="date" required />
+      <button type="submit">{{ editingIndex === null ? 'Agregar' : 'Actualizar' }}</button>
+      <button type="button" (click)="resetForm()" *ngIf="editingIndex !== null">Cancelar</button>
+    </form>
+
+    <!-- Lista de tareas -->
+    <section class="tasks-list">
+      <article 
+        class="task-card" 
+        *ngFor="let task of filteredTasks(); let i = index"
+        [ngClass]="task.priority"
+      >
+        <div class="task-card-header">
+          <span class="task-title">{{ task.title }}</span>
+          <span class="priority-badge" [ngClass]="task.priority">{{ task.priority }}</span>
+        </div>
+        <div class="task-desc">{{ task.description }}</div>
+        <div class="task-meta">
+          Creada: {{ task.createdAt | date:'shortDate' }} | 
+          Vence: {{ task.dueDate | date:'shortDate' }}
+        </div>
+        <div class="task-actions">
+          <button (click)="editTask(i)">Editar</button>
+          <button (click)="removeTask(i)">Borrar</button>
+          <button (click)="toggleStatus(i)">
+            {{ task.status === 'completada' ? 'Pendiente' : 'Completar' }}
+          </button>
+        </div>
+      </article>
+    </section>
+  </main>
+</div>
