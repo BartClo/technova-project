@@ -1,1 +1,44 @@
-/* styles for login component */
+/* styles for login component */.dashboard-wrapper {
+padding: 2rem;
+display: flex;
+justify-content: center;
+}
+
+.dashboard-main {
+max-width: 700px;
+width: 100%;
+}
+
+h2 {
+margin-bottom: 1rem;
+font-size: 1.8rem;
+color: #333;
+}
+
+.chart-container {
+background-color: #fff;
+border-radius: 12px;
+padding: 1rem;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+margin-bottom: 2rem;
+}
+
+.volver-btn {
+display: inline-block;
+text-align: center;
+}
+
+.btn-main {
+background-color: #3b82f6;
+color: #fff;
+padding: 0.5rem 1rem;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+font-weight: 600;
+text-decoration: none;
+}
+
+.btn-main:hover {
+background-color: #2563eb;
+}
