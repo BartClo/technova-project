@@ -1,4 +1,14 @@
-<nav>
-  <a routerLink="/dashboard/tasks">Tareas</a>
-</nav>
-<router-outlet></router-outlet>
+<div class="dashboard-wrapper"> <main class="dashboard-main"> <h2>Resumen de Tareas</h2>
+
+<div class="chart-container">
+  <canvas
+    baseChart
+    [data]="barChartData"
+    [options]="barChartOptions"
+    type="bar">
+  </canvas>
+</div>
+
+<a routerLink="/tasks" class="btn-main volver-btn">← Volver a Tareas</a>
+</main> </div>
+
