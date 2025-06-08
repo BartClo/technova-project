@@ -24,6 +24,9 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 18px;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .tasks-header h2 {
@@ -33,7 +36,7 @@ body {
 }
 
 .btn-main {
-  background: #222;
+  background: #2d6cdf;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -46,6 +49,19 @@ body {
 
 .btn-main:hover {
   background: #444;
+}
+
+.btn-dash {
+  background: #2d6cdf;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
 }
 
 .tasks-filters {

@@ -2,9 +2,12 @@
   <main class="tasks-main">
     <div class="tasks-header">
       <h2>Mis tareas</h2>
-      <button class="btn-main" (click)="showForm = !showForm">
-        {{ showForm ? 'Cerrar' : 'Nueva tarea' }}
-      </button>
+      <div class="tasks-header-actions">
+        <button class="btn-main" (click)="showForm = !showForm">
+          {{ showForm ? 'Cerrar' : 'Nueva tarea' }}
+        </button>
+        <button class="btn-dash" (click)="goToDashboard()">Ver Dashboard</button>
+      </div>
     </div>
 
     <!-- Filtros funcionales -->
@@ -39,7 +42,19 @@
       </select>
       <input [(ngModel)]="formCreatedAt" name="createdAt" type="date" required />
       <input [(ngModel)]="formDueDate" name="dueDate" type="date" required />
-      <button type="submit">{{ editingIndex === null ? 'Agregar' : 'Actualizar' }}</button>
+      <button 
+        type="submit"
+        [disabled]="
+          !formTitle || 
+          !formDescription || 
+          !formStatus || 
+          !formPriority || 
+          !formCreatedAt || 
+          !formDueDate
+        "
+      >
+        {{ editingIndex === null ? 'Agregar' : 'Actualizar' }}
+      </button>
       <button type="button" (click)="resetForm()" *ngIf="editingIndex !== null">Cancelar</button>
     </form>
 
@@ -70,4 +85,3 @@
     </section>
   </main>
 </div>
-<button class="btn btn-primary" (click)="goToDashboard()">Ver Dashboard</button>

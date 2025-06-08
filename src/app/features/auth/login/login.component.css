@@ -1,9 +1,14 @@
-/* styles for login component */.tasks-wrapper {
+.tasks-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
   min-height: 80vh;
+}
+.tasks-wrapper h1, h2{
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
 }
 
 .tasks-main {
