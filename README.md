@@ -11,6 +11,19 @@
 - **Interfaz amigable:** Diseño responsivo y atractivo.
 
 ---
+## LISTADO DE COMMITS:
+1. **Commit inicial**
+2. **Creación estructura inicial**
+3. **Login con componente Standalone**
+4. **Configuración Rutas y componentes standalone dashboard**
+5. **Componente standalone para tareas**
+6. **Primer test MVP funcional**
+7. **Mejora visual Tareas**
+8. **Mejora visual LOGIN / Cambio de rutas**
+9. **Exportación de Dashboard a PNG**
+10. **Detalles visuales Final**
+11. **Actualización README.md**
+---
 
 ## Instalación
 
