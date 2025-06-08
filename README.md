@@ -1,6 +1,6 @@
 # TechnovaApp
 
-**TechnovaApp** es una aplicación web desarrollada con Angular que permite a los usuarios gestionar tareas personales y visualizar estadísticas a través de un panel gráfico moderno.
+**TechnovaApp** es una aplicación web desarrollada con Angular que permite a los usuarios gestionar tareas para la empresa Technova y visualizar estadísticas a través de un panel gráfico moderno.
 
 ## Características principales
 
