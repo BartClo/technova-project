@@ -101,5 +101,12 @@ ng e2e
 - [Chart.js](https://www.chartjs.org/)
 
 ---
+Nota: No está integrado a una base de datos, por lo que solo se guardan localmente las acciones realizadas en la página web.
+
+
+
+## Créditos
+
+Gracias a los integrantes del grupo por llevar a cabo con exito este trabajo, Nicolás Campos, Ignacio Santamaría y Marcelo Muñoz
 
 **¡Gracias por usar TechnovaApp! Si tienes sugerencias o encuentras algún problema, no dudes en abrir un issue o pull request.**
