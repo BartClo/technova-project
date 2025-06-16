@@ -33,6 +33,7 @@
       <input [(ngModel)]="formDescription" name="description" placeholder="Descripción" required />
       <select [(ngModel)]="formStatus" name="status" required>
         <option value="pendiente">Pendiente</option>
+        <option value="en progreso">En progreso</option>
         <option value="completada">Completada</option>
       </select>
       <select [(ngModel)]="formPriority" name="priority" required>
@@ -40,8 +41,8 @@
         <option value="media">Media</option>
         <option value="baja">Baja</option>
       </select>
-      <input [(ngModel)]="formCreatedAt" name="createdAt" type="date" required />
-      <input [(ngModel)]="formDueDate" name="dueDate" type="date" required />
+      <input [(ngModel)]="formCreatedAt" name="created_at" type="date" required />
+      <input [(ngModel)]="formDueDate" name="due_date" type="date" required />
       <button 
         type="submit"
         [disabled]="
@@ -71,8 +72,8 @@
         </div>
         <div class="task-desc">{{ task.description }}</div>
         <div class="task-meta">
-          Creada: {{ task.createdAt | date:'shortDate' }} | 
-          Vence: {{ task.dueDate | date:'shortDate' }}
+          Creada: {{ task.created_at | date:'shortDate' }} | 
+          Vence: {{ task.due_date | date:'shortDate' }}
         </div>
         <div class="task-actions">
           <button (click)="editTask(i)">Editar</button>

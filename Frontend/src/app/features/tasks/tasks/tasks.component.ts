@@ -2,23 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TaskService, Task } from './task.service';
 
 type TaskStatus = 'pendiente' | 'en progreso' | 'completada';
 type TaskPriority = 'baja' | 'media' | 'alta';
-
-interface Task {
-  title: string;
-  description: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  createdAt: Date;
-  dueDate: Date;
-}
-
-function parseDateFromInput(dateString: string): Date {
-  const [year, month, day] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day); // El mes en JS es base 0
-}
 
 @Component({
   standalone: true,
@@ -27,13 +14,13 @@ function parseDateFromInput(dateString: string): Date {
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
-
-
 export class TasksComponent {
   tasks: Task[] = [];
   editingIndex: number | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private taskService: TaskService) {
+    this.loadTasks();
+  }
 
   // Form fields
   formTitle = '';
@@ -49,21 +36,33 @@ export class TasksComponent {
     return new Date(year, month - 1, day);
   }
 
+  loadTasks() {
+    this.taskService.getTasks().subscribe({
+      next: tasks => this.tasks = tasks,
+      error: err => alert('Error al cargar tareas: ' + err.message)
+    });
+  }
+
   // Agregar o actualizar tarea
   saveTask() {
+    if (this.formDueDate < this.formCreatedAt) {
+      alert('La fecha de vencimiento debe ser posterior a la de creación.');
+      return;
+    }
+
     const task: Task = {
       title: this.formTitle,
       description: this.formDescription,
       status: this.formStatus,
       priority: this.formPriority,
-      createdAt: parseDateFromInput(this.formCreatedAt),
-      dueDate: parseDateFromInput(this.formDueDate)
+      created_at: this.formCreatedAt,
+      due_date: this.formDueDate
     };
 
     if (this.editingIndex === null) {
-      this.tasks.push(task);
-    } else {
-      this.tasks[this.editingIndex] = task;
+      this.taskService.addTask(task).subscribe(() => this.loadTasks());
+    } else if (this.tasks[this.editingIndex]?.id) {
+      this.taskService.updateTask(this.tasks[this.editingIndex].id!, task).subscribe(() => this.loadTasks());
       this.editingIndex = null;
     }
     this.resetForm();
@@ -74,16 +73,20 @@ export class TasksComponent {
     const t = this.tasks[index];
     this.formTitle = t.title;
     this.formDescription = t.description;
-    this.formStatus = t.status;
-    this.formPriority = t.priority;
-    this.formCreatedAt = t.createdAt.toISOString().substring(0, 10);
-    this.formDueDate = t.dueDate.toISOString().substring(0, 10);
+    this.formStatus = t.status as TaskStatus;
+    this.formPriority = t.priority as TaskPriority;
+    // Las fechas vienen como string 'YYYY-MM-DD', así que las usamos directo
+    this.formCreatedAt = t.created_at;
+    this.formDueDate = t.due_date;
     this.editingIndex = index;
   }
 
   // Eliminar tarea
   removeTask(index: number) {
-    this.tasks.splice(index, 1);
+    const task = this.tasks[index];
+    if (task?.id) {
+      this.taskService.deleteTask(task.id).subscribe(() => this.loadTasks());
+    }
     if (this.editingIndex === index) {
       this.resetForm();
       this.editingIndex = null;
@@ -108,14 +111,18 @@ export class TasksComponent {
     } else {
       task.status = 'pendiente';
     }
+    if (task.id) {
+      this.taskService.updateTask(task.id, task).subscribe(() => this.loadTasks());
+    }
   }
-  getTimeLeft(dueDate: Date): string {
+  getTimeLeft(dueDate: string): string {
+    // dueDate es string 'YYYY-MM-DD'
+    const due = new Date(dueDate);
     const now = new Date();
-    const timeDiff = dueDate.getTime() - now.getTime();
+    const timeDiff = due.getTime() - now.getTime();
     const daysLeft = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
     const hoursLeft = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-
     return `${daysLeft} días, ${hoursLeft} horas, ${minutesLeft} minutos`;
   }
 

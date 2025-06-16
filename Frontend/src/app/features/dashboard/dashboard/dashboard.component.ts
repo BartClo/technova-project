@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartType, ChartData, ChartOptions } from 'chart.js';
 import { RouterModule } from '@angular/router';
+import { TaskService, Task } from '../../tasks/tasks/task.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   public barChartOptions: ChartOptions<'bar'> = {
     responsive: true,
     plugins: {
@@ -27,23 +28,35 @@ export class DashboardComponent {
       },
     },
   };
-
   public barChartType: ChartType = 'bar';
-
-  public tasks = [
-    { title: 'Tarea 1', completed: false },
-    { title: 'Tarea 2', completed: true },
-    { title: 'Tarea 3', completed: false },
-    { title: 'Tarea 4', completed: true },
-    { title: 'Tarea 5', completed: true },
-  ];
+  public barChartData: ChartData<'bar'> = {
+    labels: ['Pendientes', 'Completadas'],
+    datasets: [
+      {
+        label: 'Tareas',
+        data: [0, 0],
+        backgroundColor: ['#f59e0b', '#10b981'],
+        borderRadius: 8,
+      },
+    ],
+  };
+  tasks: Task[] = [];
+  constructor(private taskService: TaskService) {}
+  ngOnInit() {
+    this.taskService.getTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks;
+        this.updateChartData();
+      },
+    });
+  }
 
   get pendingTasksCount() {
-    return this.tasks.filter(t => !t.completed).length;
+    return this.tasks.filter((t) => t.status !== 'completada').length;
   }
 
   get completedTasksCount() {
-    return this.tasks.filter(t => t.completed).length;
+    return this.tasks.filter((t) => t.status === 'completada').length;
   }
 
   get totalTasks() {
@@ -51,27 +64,15 @@ export class DashboardComponent {
   }
 
   get completedPercentage() {
-    return this.totalTasks === 0 ? 0 : Math.round((this.completedTasksCount / this.totalTasks) * 100);
+    return this.totalTasks === 0
+      ? 0
+      : Math.round((this.completedTasksCount / this.totalTasks) * 100);
   }
 
   get pendingPercentage() {
-    return this.totalTasks === 0 ? 0 : Math.round((this.pendingTasksCount / this.totalTasks) * 100);
-  }
-
-  public barChartData: ChartData<'bar'> = {
-    labels: ['Pendientes', 'Completadas'],
-    datasets: [
-      {
-        label: 'Tareas',
-        data: [0, 0], // Se actualizará en ngOnInit
-        backgroundColor: ['#f59e0b', '#10b981'],
-        borderRadius: 8,
-      },
-    ],
-  };
-
-  ngOnInit() {
-    this.updateChartData();
+    return this.totalTasks === 0
+      ? 0
+      : Math.round((this.pendingTasksCount / this.totalTasks) * 100);
   }
 
   updateChartData() {
